@@ -1,7 +1,10 @@
 #include <ServoInput.h>
-#define FOCUS 6
-#define SHUTTER 7
-ServoInputPin<2> servo; // can also be pin 3 on pro mini
+#define FOCUS 7 // pin for focus transistor
+#define SHUTTER 6 // pin for shutter ransistor
+ServoInputPin<2> servo; // pin 2 or 3 on pro mini
+int pings = 25;    // when to send middle (focus) pos to prevent camera sleep
+uint32_t idleTime;
+
 
 void setup()
 {
@@ -9,6 +12,8 @@ void setup()
   pinMode(SHUTTER, OUTPUT);
   digitalWrite(FOCUS, LOW);
   digitalWrite(SHUTTER, LOW);
+  idleTime = millis();
+  // Serial.begin(9600);
 }
 
 void loop(){
@@ -17,6 +22,14 @@ void loop(){
   switch (mode){
      case 0:
       delay (50);
+      if (millis() - idleTime > pings*1000) {
+       digitalWrite(FOCUS, HIGH);
+       digitalWrite(LED_BUILTIN, HIGH); 
+       delay(100);
+       digitalWrite(FOCUS, LOW);
+       digitalWrite(LED_BUILTIN, LOW); 
+       idleTime = millis();        
+      }
       break;
      case 1:
        digitalWrite(FOCUS, HIGH);
@@ -35,4 +48,7 @@ void loop(){
        digitalWrite(LED_BUILTIN, LOW); 
        break;
    }
+   // Serial.print(rcinput);
+   // Serial.print(" - ");   
+   // Serial.println(millis() - idleTime);
 }
