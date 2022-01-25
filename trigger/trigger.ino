@@ -1,6 +1,6 @@
 #include <ServoInput.h>
 #define FOCUS 7 // pin for focus transistor
-#define SHUTTER 6 // pin for shutter ransistor
+#define SHUTTER 6 // pin for shutter transistor (pin 8 on drawn schematics)
 ServoInputPin<2> servo; // pin 2 or 3 on pro mini
 int pings = 25;    // when to send middle (focus) pos to prevent camera sleep
 uint32_t idleTime;
